@@ -1,0 +1,6 @@
+target/
+.env
+.vscode
+node_modules/
+public/images/
+package-lock.json

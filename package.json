@@ -1,0 +1,50 @@
+{
+  "name": "ta-backend",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=14",
+    "npm": ">=6"
+  },
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "ajv": "^8.6.3",
+    "aws-sdk": "^2.804.0",
+    "axios": "^0.21.4",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "commander": "^6.2.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "cryptr": "^6.0.2",
+    "debug": "^4.3.2",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "form-data": "^3.0.0",
+    "http-errors": "~1.6.3",
+    "hummus": "^1.0.110",
+    "isset": "^1.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "morgan": "~1.10.0",
+    "multer": "^1.4.3",
+    "multer-s3": "^2.9.0",
+    "node-cron": "^3.0.0",
+    "node-localstorage": "^2.1.6",
+    "nodemailer": "^6.4.16",
+    "path": "^0.12.7",
+    "pdfkit": "^0.11.0",
+    "request": "^2.88.2",
+    "smtp": "^0.1.4",
+    "textversionjs": "^1.1.3",
+    "underscore": "^1.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
