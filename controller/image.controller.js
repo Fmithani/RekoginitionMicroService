@@ -119,10 +119,7 @@ updateImage = async (req, res, image) => {
       },
       AttributeUpdates: {
         labels: {
-          Value: image?.LabelsArray
-        },
-        confidence: {
-          Value: image?.ConfidenceObj
+          Value: image?.LabelsObject
         },
       },
       ReturnValue: "ALL_NEW"
@@ -158,7 +155,6 @@ getLablesRekognition = (imageData) => {
     };
 
     imageData.LabelsArray = [];
-    imageData.ConfidenceObj = {};
 
     const rekognition = new AWS.Rekognition();
 
@@ -167,21 +163,29 @@ getLablesRekognition = (imageData) => {
         reject(imageData);
       } else {
         var labelArray = [];
-        var confidenceObj = {};
+        var labelObj = {};
 
         data.Labels.map((obj) => {
-          labelArray.push(obj.Name);
-          confidenceObj[obj.Name] = obj.Confidence;
-        });
 
+          labelObj[obj.Name] = {
+            Confidance: obj.Confidence,
+            Instances: obj.Instances,
+          };
+
+          labelArray.push(obj.Name);
+
+        });
+        
         imageData.LabelsArray = labelArray;
-        imageData.ConfidenceObj = confidenceObj;
+        imageData.LabelsObject = labelObj;
 
         resolve(imageData);
       }
     });
   });
 };
+
+
 
 getFaceRekognition = (imageData) => {
   return new Promise((resolve, reject) => {
@@ -200,7 +204,12 @@ getFaceRekognition = (imageData) => {
       if (err) {
         reject(imageData);
       } else {
+
         imageData.FaceDetails = data.FaceDetails;
+
+        imageData.FaceDetails.forEach(o => {
+          delete o.Landmarks;
+        });
 
         resolve(imageData);
       }
