@@ -14,5 +14,6 @@ app.use(cors())
 router.use(validate.Valid);
 
 router.post('/api/image-rekognition', image.rekognizeImage);
+router.post('/api/image-rekognition-search', image.rekognizeImageWithoutUpdate);
 
 module.exports = router;
