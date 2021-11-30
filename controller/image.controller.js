@@ -7,6 +7,38 @@ const Ajv = require("ajv");
 
 const isDev = process.env.NODE_ENV !== "production";
 
+exports.rekognizeImageWithoutUpdate = async(req, res, next) => {
+  
+  if (isDev) {
+    AWS.config.update(config.aws_local_config);
+  } else {
+    AWS.config.update(config.aws_remote_config);
+  }
+
+  let _body = req.body;
+  let _res = {};
+  let _res_error = {};
+
+  let imageData = {
+    image_id: _body.image_id,
+    file_name: _body.image_name,
+  };
+
+  getLablesRekognition(imageData)
+  .then((image) => {
+    
+    _res = {
+      TopLabel : image.TopLabel.Name,
+    };
+
+    return Response(res, true, MESSAGE.RECORD_RETRIVED, _res, 200, _res_error);
+
+  })
+  .catch((error) => {
+    return Response(res, true, MESSAGE.RECORD_NOT_RETRIVED, null, 200, error);
+  })
+}
+
 exports.rekognizeImage = async (req, res, next) => {
   const schema = {
     type: "object",
@@ -164,6 +196,8 @@ getLablesRekognition = (imageData) => {
       } else {
         var labelArray = [];
         var labelObj = {};
+        var topLabel = "";
+        let maxConfidence = 0;
 
         data.Labels.map((obj) => {
 
@@ -172,12 +206,21 @@ getLablesRekognition = (imageData) => {
             Instances: obj.Instances,
           };
 
+          if (obj.Confidence > maxConfidence) {
+            maxConfidence = obj.Confidence;
+            topLabel = obj.Name;
+          }
+
           labelArray.push(obj.Name);
 
         });
         
         imageData.LabelsArray = labelArray;
         imageData.LabelsObject = labelObj;
+        imageData.TopLabel = {
+          Name: topLabel,
+          Confidance: maxConfidence
+        }
 
         resolve(imageData);
       }
